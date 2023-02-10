@@ -1,11 +1,14 @@
 import random
-#from gtts import gTTS
-#import os
-#from time import sleep
+from gtts import gTTS
+import os
+from time import sleep
+
+
 def run():
     while True:
-        color_count = {'Red': 0,'Blue': 0,'Green': 0,'Yellow': 0}
-        body_on = {'Left Hand': '','Right Hand': '','Left Foot': '','Right Foot': ''}
+        color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0}
+        body_on = {'Left Hand': '', 'Right Hand': '',
+                   'Left Foot': '', 'Right Foot': ''}
         x = ''
         y = input('Players: ')
         if y == '2':
@@ -27,8 +30,8 @@ def run():
                 print(output)
                 if body_on[part] in color_count.keys():
                     color_count[body_on[part]] -= 1
-                body_on[part] = color 
-                color_count[body_on[part]] += 1 
+                body_on[part] = color
+                color_count[body_on[part]] += 1
             elif x == '2':
                 y = 3
                 x = ''
@@ -37,16 +40,24 @@ def run():
                 print(body_on)
             elif x == 'restart':
                 break
-            #print(color_count, body_on, x, y) #debugging line
+            # print(color_count, body_on, x, y) #debugging line
             x = input()
-            
+
         if x == 'quit':
             break
+
+        # audio = gTTS(output, slow = False)
+        # audio.save("call_out.mp3")
+        # os.system("start call_out.mp3")
+        # sleep(5)
+        # os.system("taskkill /F /IM wmplayer.exe")
+        #os.system("del call_out.mp3")
+
 
 if __name__ == '__main__':
     run()
 
-#working on adding functionality for both voice inputs and outputs
+# working on adding functionality for both voice inputs and outputs
 '''
     audio = gTTS(output, slow = False)
     audio.save("call_out.mp3")
