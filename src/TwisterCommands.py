@@ -2,8 +2,8 @@ from sense_hat import SenseHat
 sns = SenseHat()
 
 def twister_command(command, color):
-    color = 'blue'
-    command = 'left_foot'
+    #color = 'blue'
+    #command = 'left_foot'
 
     if(color == 'red'):
         x = (255,0,0)
