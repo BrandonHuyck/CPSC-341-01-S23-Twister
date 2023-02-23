@@ -1,5 +1,5 @@
 import pvporcupine
-from pvrecorder import PvRecorder  # '-1' is the default input audio device.
+from pvrecorder import PvRecorder
 
 
 porcupine = pvporcupine.create(
@@ -9,9 +9,11 @@ porcupine = pvporcupine.create(
 
 
 def get_next_audio_frame():
-    recorder = PvRecoder(device_index=-1)
+    recorder = PvRecorder(device_index=-1, frame_length=2000) # -1 is the default input audio device.
     recorder.start()
-    return recorder.read()
+    pcm = recorder.read()
+    recorder.delete()
+    return pcm
 
 
 flag = True
@@ -24,5 +26,6 @@ while flag:
         pass
     elif keyword_index == 1:
         flag = False
+    print("bottom of while loop")
 
 porcupine.delete()
