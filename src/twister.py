@@ -29,6 +29,18 @@ def audio_detection():
         porcupine.delete()
     return False
 
+def AudioOutput(output):
+    #gTTS Creation of Output
+    tts = gTTS(output)
+    tts.save('hello.mp3')
+    #pygame Audio Output (using mixer)
+    mixer.init()
+    mixer.music.load("hello.mp3")
+    mixer.music.play()
+    while mixer.music.get_busy():  # wait for music to finish playing
+        sleep(1)
+    mixer.quit()
+
 def run(source):
     while True:
         color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0}
@@ -55,16 +67,8 @@ def run(source):
                 TwisterCommands.twister_command(
                     part.replace(' ', '_'), color.lower())
                 print(output)
-                #gTTS Creation of Output
-                tts = gTTS(output)
-                tts.save('hello.mp3')
-                #pygame Audio Output (using mixer)
-                mixer.init()
-                mixer.music.load("hello.mp3")
-                mixer.music.play()
-                while mixer.music.get_busy():  # wait for music to finish playing
-                    sleep(1)
-                mixer.quit()
+                #gTTS Creation/Audio Output
+                AudioOutput(output)
                 if body_on[part] in color_count.keys():
                     color_count[body_on[part]] -= 1
                 body_on[part] = color
