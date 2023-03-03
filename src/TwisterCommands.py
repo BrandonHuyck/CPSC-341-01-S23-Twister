@@ -61,10 +61,10 @@ def twister_command(command, color):
     ]
 
     if(command == 'left_foot'):
-        sns.set_pixels('left_foot')
+        sns.set_pixels(left_foot)
     elif(command == 'right_foot'):
-        sns.set_pixels('right_foot')
+        sns.set_pixels(right_foot)
     elif(command == 'right_hand'):
-        sns.set_pixels('right_hand')
+        sns.set_pixels(right_hand)
     elif(command == 'left_hand'):
-        sns.set_pixels('left_hand')
+        sns.set_pixels(left_hand)
