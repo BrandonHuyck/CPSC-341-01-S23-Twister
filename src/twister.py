@@ -28,7 +28,7 @@ def audio_detection():
         porcupine.delete()
     return False
 
-def run():
+def run(source):
     while True:
         color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0}
         body_on = {'Left Hand': '', 'Right Hand': '',
@@ -67,7 +67,7 @@ def run():
             elif x == 'restart':
                 break
             # print(color_count, body_on, x, y) #debugging line
-            x = audio_detection()
+            x = audio_detection() if source == 0 else input() == ""
 
         if x == 'quit':
             break
@@ -81,7 +81,7 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    run(-1)
 
 # working on adding functionality for both voice inputs and outputs
 '''
