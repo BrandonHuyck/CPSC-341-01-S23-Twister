@@ -52,7 +52,7 @@ def run(source):
                     continue
                 output = part + ' ' + color
                 TwisterCommands.twister_command(
-                    part.replace(' ', '_'), color.lower())
+                    part.replace(' ', '_').lower(), color.lower())
                 print(output)
                 if body_on[part] in color_count.keys():
                     color_count[body_on[part]] -= 1
