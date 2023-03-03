@@ -1,11 +1,12 @@
 import random
 from gtts import gTTS
-from pygame import mixer
-import os
 from time import sleep
-import TwisterCommands
+from pygame import mixer
 import pvporcupine
 from pvrecorder import PvRecorder
+from sense_hat import SenseHat
+
+sns = SenseHat()
 
 def audio_detection():
     # -1 is the default input audio device.
@@ -29,6 +30,92 @@ def audio_detection():
         porcupine.delete()
     return False
 
+def twister_command(command, color):
+    #color = 'blue'
+    #command = 'left_foot'
+
+    if(color == 'red'):
+        x = (255,0,0)
+    elif(color == 'green'):
+        x = (0,255,0)
+    elif(color == 'blue'):
+        x = (0,0,255)
+    elif(color == 'yellow'):
+        x = (255,255,0)
+
+    b = (1, 1, 1) #Black
+
+    left_hand = [
+        x, x, x, x, x, x, x, x,
+        x, b, x, x, x, b, x, b,
+        x, b, x, x, x, b, x, b,
+        x, b, x, x, x, b, b, b,
+        x, b, x, x, x, b, x, b,
+        x, b, x, x, x, b, x, b,
+        x, b, b, b, x, b, x, b,
+        x, x, x, x, x, x, x, x,
+    ]
+
+    left_foot = [
+        x, x, x, x, x, x, x, x,
+        x, b, x, x, x, b, b, b,
+        x, b, x, x, x, b, x, x,
+        x, b, x, x, x, b, b, x,
+        x, b, x, x, x, b, x, x,
+        x, b, x, x, x, b, x, x,
+        x, b, b, b, x, b, x, x,
+        x, x, x, x, x, x, x, x,
+    ]
+
+    right_hand = [
+        x, x, x, x, x, x, x, x,
+        x, b, b, b, x, b, x, b,
+        x, b, x, b, x, b, x, b,
+        x, b, b, x, x, b, b, b,
+        x, b, x, b, x, b, x, b,
+        x, b, x, b, x, b, x, b,
+        x, b, x, b, x, b, x, b,
+        x, x, x, x, x, x, x, x,
+    ]
+
+    right_foot = [
+        x, x, x, x, x, x, x, x,
+        x, b, b, b, x, b, b, b,
+        x, b, x, b, x, b, x, x,
+        x, b, b, x, x, b, b, x,
+        x, b, x, b, x, b, x, x,
+        x, b, x, b, x, b, x, x,
+        x, b, x, b, x, b, x, x,
+        x, x, x, x, x, x, x, x,
+    ]
+
+    if(command == 'left_foot'):
+        sns.set_pixels(left_foot)
+    elif(command == 'right_foot'):
+        sns.set_pixels(right_foot)
+    elif(command == 'right_hand'):
+        sns.set_pixels(right_hand)
+    elif(command == 'left_hand'):
+        sns.set_pixels(left_hand)
+
+def get_players():
+    sns.show_message("Enter Number Players")
+    players = 2
+    sns.show_letter("2")
+    while True:
+        for event in sns.stick.get_events():
+            if event.direction == "left":
+                players = 2
+                sns.show_letter(str(players))
+            elif event.direction == "up":
+                players = 3
+                sns.show_letter(str(players))
+            elif event.direction == "right" :
+                players = 4
+                sns.show_letter(str(players))
+            elif event.direction == "middle":
+                return players
+            
 def AudioOutput(output):
     #gTTS Creation of Output
     tts = gTTS(output)
@@ -42,12 +129,13 @@ def AudioOutput(output):
     mixer.quit()
 
 def run(source):
+    
     while True:
         color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0}
         body_on = {'Left Hand': '', 'Right Hand': '',
                    'Left Foot': '', 'Right Foot': ''}
         x = True
-        y = input('Players: ')
+        y = input('Players: ') if source == 0 else get_players()
         if y == '2':
             y = 3
         elif y == 'quit':
@@ -64,8 +152,7 @@ def run(source):
                 if color_count[color] == y:
                     continue
                 output = part + ' ' + color
-                TwisterCommands.twister_command(
-                    part.replace(' ', '_'), color.lower())
+                twister_command(part.replace(' ', '_').lower(), color.lower())
                 print(output)
                 #gTTS Creation/Audio Output
                 AudioOutput(output)
