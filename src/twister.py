@@ -5,6 +5,7 @@ from pygame import mixer
 import pvporcupine
 from pvrecorder import PvRecorder
 from sense_hat import SenseHat
+# from sys import exit
 
 sns = SenseHat()
 
@@ -99,20 +100,20 @@ def twister_command(command, color):
         sns.set_pixels(left_hand)
 
 def get_players():
-    sns.show_message("Enter Number Players")
+    sns.show_message("P")
     players = 2
     sns.show_letter("2")
     while True:
         for event in sns.stick.get_events():
-            if event.direction == "left":
-                players = 2
+            if event.direction == "right":
+                players = players % 3 + 2
                 sns.show_letter(str(players))
-            elif event.direction == "up":
-                players = 3
-                sns.show_letter(str(players))
-            elif event.direction == "right" :
-                players = 4
-                sns.show_letter(str(players))
+            # elif event.direction == "up":
+            #     players = 3
+            #     sns.show_letter(str(players))
+            # elif event.direction == "right" :
+            #     players = 4
+            #     sns.show_letter(str(players))
             elif event.direction == "middle":
                 return players
             
@@ -128,6 +129,16 @@ def AudioOutput(output):
         sleep(1)
     mixer.quit()
 
+# def restart():
+#     sns.show_message("Again?")
+#     while True:
+#         for event in sns.stick.get_events():
+#             if event.direction == "left":
+#                 return True
+#             elif event.direction == "right" :
+#                 return False
+
+
 def run(source):
     
     while True:
@@ -135,91 +146,45 @@ def run(source):
         body_on = {'Left Hand': '', 'Right Hand': '',
                    'Left Foot': '', 'Right Foot': ''}
         x = True
-        y = input('Players: ') if source == 0 else get_players()
-        if y == '2':
-            y = 3
-        elif y == 'quit':
-            break
-        else:
-            y = 2
+        # y = get_players()
+
+        # if y == '2':
+        #     y = 3
+        # else:
+        #     y = 2
+
+        y = 2
 
         while x:
-            if x == True:
-                part = random.choice(list(body_on.keys()))
-                color = random.choice(list(color_count.keys()))
-                if body_on[part] == color:
-                    continue
-                if color_count[color] == y:
-                    continue
-                output = part + ' ' + color
-                twister_command(part.replace(' ', '_').lower(), color.lower())
-                print(output)
-                #gTTS Creation/Audio Output
-                AudioOutput(output)
-                if body_on[part] in color_count.keys():
-                    color_count[body_on[part]] -= 1
-                body_on[part] = color
-                color_count[body_on[part]] += 1
-            elif x == '2':
-                y = 3
-                x = ''
+            part = random.choice(list(body_on.keys()))
+            color = random.choice(list(color_count.keys()))
+
+            if body_on[part] == color:
                 continue
-            elif x == 'on':
-                print(body_on)
-            elif x == 'restart':
-                break
-            # print(color_count, body_on, x, y) #debugging line
+            if color_count[color] == y:
+                continue
+
+            output = part + ' ' + color
+            twister_command(part.replace(' ', '_').lower(), color.lower())
+            print(output)
+            AudioOutput(output)
+
+            if body_on[part] in color_count.keys():
+                color_count[body_on[part]] -= 1
+            body_on[part] = color
+            color_count[body_on[part]] += 1
+
+            # for event in sns.stick.get_events():
+            #     # if y != 3 and event.direction == "down":
+            #     #     y = 3
+            #     #     sns.show_message("Two Players Remaining")
+            #     if event.direction == "down":
+            #         sns.show_message("WINNER!!!")
+            #         x = False
             x = audio_detection() if source == 0 else input() == ""
 
-        if x == 'quit':
-            break
-
-        # audio = gTTS(output, slow = False)
-        # audio.save("call_out.mp3")
-        # os.system("start call_out.mp3")
-        # sleep(5)
-        # os.system("taskkill /F /IM wmplayer.exe")
-        # os.system("del call_out.mp3")
-
+        # if not restart():
+        #     exit()
 
 if __name__ == '__main__':
-    run(-1)
-
-# working on adding functionality for both voice inputs and outputs
-'''
-    audio = gTTS(output, slow = False)
-    audio.save("call_out.mp3")
-    os.system("start call_out.mp3")
-    sleep(2)
-    os.system("del call_out.mp3")
-'''
-'''
-color_count = {'Red': 0,'Blue': 0,'Green': 0,'Yellow': 0}
-body_on = {'Left Hand': '','Right Hand': '','Left Foot': '','Right Foot': ''}
-if input('Players: ') == '2':
-    y = 3
-else:
-    y = 2
-
-while True:
-    part = random.choice(list(body_on.keys()))
-    color = random.choice(list(color_count.keys()))
-    if body_on[part] == color:
-        continue
-    if color_count[color] == y:
-       continue
-    output = part + ' ' + color
-    print(output)
-    audio = gTTS(output, slow = False)
-    audio.save("call_out.mp3")
-    os.system("start call_out.mp3")
-    sleep(5)
-    os.system("taskkill /F /IM wmplayer.exe")
-    #os.system("del call_out.mp3")
-    #sleep(8)
-    #input()
-    if body_on[part] in color_count.keys():
-        color_count[body_on[part]] -= 1
-    body_on[part] = color
-    color_count[body_on[part]] += 1
-    '''
+    run(0)
