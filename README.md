@@ -1,7 +1,11 @@
-useful links:
+Twister program by Brandon Huyck, Carson McDrmott, Jack Nealon
+under the guidance of Dr. Yanping Zhang
+at the School of Engineering and Applied Sciences, Gonzaga University,
+Spokane, WA, 99258
+for CPSC 341-01 Internet of Things, Spring 2023
 
-https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat/3
+/Next-Spin_en_raspberry-pi_v2_1_0 contains voice detection for "next spin" on the Raspberry Pi
 
-https://www.techradar.com/how-to/how-to-control-the-raspberry-pi-with-your-voice
+/Two-Players_en_raspberry-pi_v2_1_0 contains voice detection for "two players" on the Raspberry Pi
 
-https://github.com/pndurette/gTTS/issues/26
+To run the program, execute /src/twister.py using a python interpretor on a Raspberry Pi, optionally with a SenseHat attached
