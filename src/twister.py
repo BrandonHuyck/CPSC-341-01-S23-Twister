@@ -22,9 +22,9 @@ def audio_detection():
         while True:
             pcm = recorder.read()
             keyword_index = porcupine.process(pcm)
-            if keyword_index == 0:
+            if keyword_index == 0: # detects "next spin"
                 return True # next command
-            if keyword_index == 1:
+            if keyword_index == 1: # detects "two players"
                 return False # two players
     except KeyboardInterrupt:
         recorder.stop()
@@ -32,7 +32,7 @@ def audio_detection():
         recorder.delete()
         porcupine.delete()
 
-def twister_command(command, color):
+def twister_command(command, color): # SenseHat Display Commands
     if(color == 'red'):
         x = (255,0,0)
     elif(color == 'green'):
@@ -109,35 +109,36 @@ def AudioOutput(output):
         sleep(1)
     mixer.quit()
 
-def run():
-    color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0}
+def run(): # main/driver
+    color_count = {'Red': 0, 'Blue': 0, 'Green': 0, 'Yellow': 0} # number of body parts on each color
     body_on = {'Left Hand': '', 'Right Hand': '',
-                'Left Foot': '', 'Right Foot': ''}
-    x = True
-    y = 2
+                'Left Foot': '', 'Right Foot': ''} # what color each body part is on
+    x = True # loops while true
+    y = 2 # number of body parts allowed on each color
 
     while x:
         part = random.choice(list(body_on.keys()))
         color = random.choice(list(color_count.keys()))
 
-        if body_on[part] == color:
+        if body_on[part] == color: # if body part already on color, respin
             continue
-        if color_count[color] == y:
+        if color_count[color] == y: # if color is full, respin
             continue
 
         output = part + ' ' + color
-        twister_command(part.replace(' ', '_').lower(), color.lower())
-        print(output)
-        AudioOutput(output)
+        twister_command(part.replace(' ', '_').lower(), color.lower()) # update SenseHat display
+        print(output) # console out
+        AudioOutput(output) # audio out
 
+        # update dicts
         if body_on[part] in color_count.keys():
             color_count[body_on[part]] -= 1
         body_on[part] = color
         color_count[body_on[part]] += 1
 
-        x = audio_detection()
+        x = audio_detection() # listen for next command
 
-        if (not x) and (y == 2):
+        if (not x) and (y == 2): # update players if "two players" detected
             y = 3
             sns.show_message("TWO PLAYERS")
         x = True
